@@ -8,4 +8,22 @@
     <data name="AnalyzerDescription" xml:space="preserve">
     <value>All members marked with [Required] must be initialized.</value>
   </data>
+    <data name="InvalidOptionalMemberTitle" xml:space="preserve">
+    <value>Invalid member in OptionalRequired attribute</value>
+  </data>
+    <data name="InvalidOptionalMemberMessageFormat" xml:space="preserve">
+    <value>Member '{0}' specified in OptionalRequired attribute does not exist in type '{1}'</value>
+  </data>
+    <data name="InvalidOptionalMemberDescription" xml:space="preserve">
+    <value>All members specified in OptionalRequired attribute must exist in the declaring type.</value>
+  </data>
+    <data name="RedundantOptionalMemberTitle" xml:space="preserve">
+    <value>Redundant member in OptionalRequired attribute</value>
+  </data>
+    <data name="RedundantOptionalMemberMessageFormat" xml:space="preserve">
+    <value>Member '{0}' is already assigned in constructor and should not be in OptionalRequired attribute</value>
+  </data>
+    <data name="RedundantOptionalMemberDescription" xml:space="preserve">
+    <value>Members that are assigned in the constructor should not be specified in OptionalRequired attribute.</value>
+  </data>
 </root>
