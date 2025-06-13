@@ -22,6 +22,8 @@
         <PackageVersion>1.0.0</PackageVersion>
         <Authors>FlexibleRequired</Authors>
         <Description>Analyzer for flexible required member validation</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -49,16 +51,39 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FlexibleRequired\FlexibleRequired.csproj"/>
+        <ProjectReference Include="..\FlexibleRequired\FlexibleRequired.csproj">
+            <Private>true</Private>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+            <IncludeAssets>FlexibleRequired.dll</IncludeAssets>
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
+        <!-- 包含主分析器程序集 -->
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers\dotnet\cs\$(AssemblyName).dll" Visible="false" />
+        <!-- 包含FlexibleRequired.dll到分析器目录（供分析器运行时使用） -->
+        <None Include="$(OutputPath)\FlexibleRequired.dll" Pack="true" PackagePath="analyzers\dotnet\cs\FlexibleRequired.dll" Visible="false" />
+        <!-- 包含FlexibleRequired.dll到lib目录（供用户项目引用） -->
+        <None Include="$(OutputPath)\FlexibleRequired.dll" Pack="true" PackagePath="lib\netstandard2.0\FlexibleRequired.dll" Visible="false" />
+        <!-- 包含README.md文件到NuGet包 -->
+        <None Include="..\README.md" Pack="true" PackagePath="\" Visible="false" />
+        <!-- 包含LICENSE.txt文件到NuGet包 -->
+        <None Include="..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
     </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Remove="AnalyzerReleases.Unshipped.md" />
-      <AdditionalFiles Remove="AnalyzerReleases.Shipped.md" />
-    </ItemGroup>
+    
+    <!-- 确保依赖项被复制到输出目录 -->
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="Build" BeforeTargets="_GetPackageFiles">
+        <ItemGroup>
+            <!-- 获取所有项目引用的输出程序集 -->
+            <BuildOutputInPackage Include="$(OutputPath)FlexibleRequired.dll">
+                <TargetPath>analyzers\dotnet\cs</TargetPath>
+                <PackagePath>analyzers\dotnet\cs\FlexibleRequired.dll</PackagePath>
+            </BuildOutputInPackage>
+            <BuildOutputInPackage Include="$(OutputPath)FlexibleRequired.dll">
+                <TargetPath>lib\netstandard2.0</TargetPath>
+                <PackagePath>lib\netstandard2.0\FlexibleRequired.dll</PackagePath>
+            </BuildOutputInPackage>
+        </ItemGroup>
+    </Target>
 
 </Project>

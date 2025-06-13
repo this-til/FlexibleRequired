@@ -113,7 +113,7 @@ public class RequiredMemberAnalyzer : DiagnosticAnalyzer {
 
         // 检查构造函数上的 OptionalRequiredAttribute
         var optionalRequiredAttribute = constructorSymbol.GetAttributes()
-            .FirstOrDefault(attr => attr.AttributeClass?.Name.Contains("OptionalRequired") == true);
+            .FirstOrDefault(attr => attr.AttributeClass?.Name.StartsWith("OptionalRequired") == true);
 
         if (optionalRequiredAttribute != null) {
             // 提取可选成员名称
@@ -131,7 +131,7 @@ public class RequiredMemberAnalyzer : DiagnosticAnalyzer {
         // 如果启用了构造函数赋值扫描，分析构造函数中已经设置的属性
         if (scanConstructorAssignments) {
             var constructorAssignedMembers = GetConstructorAssignedMembers(constructorSymbol, semanticModel);
-            
+
             // 将构造函数中已经赋值的成员也视为可选（因为它们已经被设置了）
             foreach (var assignedMember in constructorAssignedMembers) {
                 optionalMembers.Add(assignedMember);
@@ -149,7 +149,7 @@ public class RequiredMemberAnalyzer : DiagnosticAnalyzer {
 
         // 获取构造函数的语法声明
         var constructorDeclarations = constructorSymbol.DeclaringSyntaxReferences;
-        
+
         foreach (var syntaxRef in constructorDeclarations) {
             if (syntaxRef.GetSyntax() is ConstructorDeclarationSyntax constructorSyntax) {
                 if (constructorSyntax.Body != null) {
@@ -166,8 +166,8 @@ public class RequiredMemberAnalyzer : DiagnosticAnalyzer {
                         }
                         else if (assignment.Left is MemberAccessExpressionSyntax memberAccess) {
                             // 成员访问赋值：this.PropertyName = value 或 object.PropertyName = value
-                            if (memberAccess.Expression is ThisExpressionSyntax || 
-                                (memberAccess.Expression is IdentifierNameSyntax && 
+                            if (memberAccess.Expression is ThisExpressionSyntax ||
+                                (memberAccess.Expression is IdentifierNameSyntax &&
                                  memberAccess.Expression.ToString() == "this")) {
                                 assignedMembers.Add(memberAccess.Name.Identifier.ValueText);
                             }
@@ -202,7 +202,7 @@ public class RequiredMemberAnalyzer : DiagnosticAnalyzer {
                         memberRequirements[member.Name] = (member, false);
                     } else {
                         AttributeData? requiredAttribute = member.GetAttributes()
-                            .FirstOrDefault(attr => attr.AttributeClass?.Name.Contains("Required") == true);
+                            .FirstOrDefault(attr => attr.AttributeClass?.Name.StartsWith("Required") == true);
 
                         if (requiredAttribute != null) {
                             // 检查 [Required] 或 [Required(true)]
