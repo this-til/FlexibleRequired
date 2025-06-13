@@ -1,0 +1,11 @@
+<root>
+    <data name="AnalyzerTitle" xml:space="preserve">
+    <value>Required member not initialized</value>
+  </data>
+    <data name="AnalyzerMessageFormat" xml:space="preserve">
+    <value>Required member(s) '{0}' must be initialized in type '{1}'</value>
+  </data>
+    <data name="AnalyzerDescription" xml:space="preserve">
+    <value>All members marked with [Required] must be initialized.</value>
+  </data>
+</root>
